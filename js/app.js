@@ -22,6 +22,16 @@ const progressEl    = document.getElementById('progress');
 const resultFill    = document.getElementById('result-fill');
 const resultSummary = document.getElementById('result-summary');
 
+const promptBtn     = document.getElementById('prompt-btn');
+const promptModal   = document.getElementById('prompt-modal');
+const promptClose   = document.getElementById('prompt-close');
+const pmSources     = document.getElementById('pm-sources');
+const pmMcqCount    = document.getElementById('pm-mcq-count');
+const pmFrqCount    = document.getElementById('pm-frq-count');
+const pmPreview     = document.getElementById('pm-preview');
+const pmCopyBtn     = document.getElementById('pm-copy-btn');
+const pmCopied      = document.getElementById('pm-copied');
+
 examContainer.addEventListener('mcq-answered', ({ detail: { correct } }) => {
   if (correct) mcqCorrect++;
   updateBadge();
@@ -149,6 +159,66 @@ function updateBadge() {
   if (frGraded > 0) parts.push(`FR ${frScore}/${frCount * 2}`);
   scoreBadge.textContent = parts.join(' | ');
 }
+
+// ── Prompt modal ──
+
+const FORMAT_SPEC = `[Exam Title]
+
+[question text] | MCQ
+[wrong answer]
+[correct answer] <correct>
+[wrong answer]
+
+[question text] | FRQ
+[model answer / explanation]`;
+
+function buildPrompt() {
+  const sources = pmSources.value.trim() || '[describe your topic or paste your notes here]';
+  const mcq     = parseInt(pmMcqCount.value) || 0;
+  const frq     = parseInt(pmFrqCount.value) || 0;
+
+  const questionLine = mcq && frq
+    ? `${mcq} multiple-choice (MCQ) and ${frq} free-response (FRQ)`
+    : mcq ? `${mcq} multiple-choice (MCQ) only`
+    : frq ? `${frq} free-response (FRQ) only`
+    : '[specify question counts above]';
+
+  return `Generate a practice exam using the exact format shown below. Output ONLY the exam text — no extra commentary.
+
+FORMAT:
+${FORMAT_SPEC}
+
+---
+Sources / topics to draw from:
+${sources}
+
+Questions: ${questionLine}`;
+}
+
+function refreshPreview() {
+  pmPreview.value = buildPrompt();
+}
+
+promptBtn.addEventListener('click', () => {
+  refreshPreview();
+  promptModal.hidden = false;
+});
+
+promptClose.addEventListener('click', () => { promptModal.hidden = true; });
+
+promptModal.addEventListener('click', e => {
+  if (e.target === promptModal) promptModal.hidden = true;
+});
+
+[pmSources, pmMcqCount, pmFrqCount].forEach(el => el.addEventListener('input', refreshPreview));
+
+let copiedTimer;
+pmCopyBtn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(pmPreview.value);
+  pmCopied.classList.add('show');
+  clearTimeout(copiedTimer);
+  copiedTimer = setTimeout(() => pmCopied.classList.remove('show'), 2000);
+});
 
 function updateProgress() {
   if (!currentExam) return;

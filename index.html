@@ -35,6 +35,40 @@ Prove the quadratic formula. | FRQ
 Complete the square on $ax^2+bx+c=0$ to derive $x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$."></textarea>
     <div class="input-actions">
       <button class="btn-primary" id="generate-btn">Generate Exam</button>
+      <button class="btn-secondary" id="prompt-btn">Get LLM Prompt</button>
+    </div>
+  </div>
+</div>
+
+<!-- Prompt modal -->
+<div id="prompt-modal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">LLM Prompt Template</span>
+      <button class="modal-close" id="prompt-close">&times;</button>
+    </div>
+    <p class="modal-hint">Fill in the three fields, then copy the full prompt into your LLM chat.</p>
+    <div class="modal-fields">
+      <label class="modal-label">
+        Sources / topics to draw from
+        <textarea class="modal-field" id="pm-sources" rows="3" placeholder="e.g. Chapter 4 of STATStextbook, or paste links/notes here…"></textarea>
+      </label>
+      <div class="modal-row">
+        <label class="modal-label modal-label-short">
+          MCQ questions
+          <input class="modal-field" id="pm-mcq-count" type="number" min="0" value="8">
+        </label>
+        <label class="modal-label modal-label-short">
+          FRQ questions
+          <input class="modal-field" id="pm-frq-count" type="number" min="0" value="2">
+        </label>
+      </div>
+    </div>
+    <div class="modal-preview-label">Generated prompt</div>
+    <textarea class="modal-preview" id="pm-preview" readonly></textarea>
+    <div class="modal-footer">
+      <button class="btn-primary" id="pm-copy-btn">Copy Prompt</button>
+      <span class="pm-copied" id="pm-copied">Copied!</span>
     </div>
   </div>
 </div>
