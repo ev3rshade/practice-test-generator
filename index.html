@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Exam Generator</title>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']], processEscapes: true },
+      options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <span id="header-title">Practice Exam Generator</span>
+  <span class="score-badge" id="score-badge" hidden></span>
+</div>
+
+<!-- Input view -->
+<div id="input-view">
+  <div class="input-wrap">
+    <h2>Exam Text</h2>
+    <textarea id="exam-input" spellcheck="false" placeholder="Algebra Quiz
+
+What is $2^{10}$? | MCQ
+512
+1024 <correct>
+2048
+
+Prove the quadratic formula. | FRQ
+Complete the square on $ax^2+bx+c=0$ to derive $x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$."></textarea>
+    <div class="input-actions">
+      <button class="btn-primary" id="generate-btn">Generate Exam</button>
+    </div>
+  </div>
+</div>
+
+<!-- Exam view -->
+<div id="exam-view" hidden>
+  <div id="exam-container"></div>
+  <div class="exam-footer">
+    <button class="btn-primary"    id="grade-btn">Grade MCQ</button>
+    <button class="btn-secondary"  id="reset-btn">Reset</button>
+    <button class="btn-secondary"  id="back-btn">← Edit</button>
+    <button class="btn-secondary"  id="save-md-btn">Save .md</button>
+    <span id="progress" class="progress"></span>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
